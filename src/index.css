@@ -1,0 +1,43 @@
+@import url(http://fonts.googleapis.com/earlyaccess/notosanskannada.css);
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+ 
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.kannada-font{
+  font-family: "Noto Sans Kannada", sans-serif; 
+  font-size: 19.0px; 
+}
+.ant-layout{
+  background-color: #ffffff;
+}
+.ant-layout-header{
+  background-color: #4c9acc;
+}
+.ant-menu{
+  text-align: center;
+} 
+section.dashboar-btn{
+  background-color: #4f9aff;
+}
+section.dashboar-btn .ant-row {
+  height: 500px ;
+}
+section.dashboar-btn button{
+  height: 81px;
+  width: 125px;
+  background-color: #0e0099;
+}
+.ant-layout-footer{
+  position: static;
+    bottom: 0;
+    width: 100%;
+}
