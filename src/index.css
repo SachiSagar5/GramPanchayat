@@ -15,6 +15,7 @@ code {
 .kannada-font{
   font-family: "Noto Sans Kannada", sans-serif; 
   font-size: 19.0px; 
+  font-weight: bold;
 }
 .ant-layout{
   background-color: #ffffff;

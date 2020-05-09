@@ -1,7 +1,7 @@
 import React from 'react'
 import axios from 'axios'
 import logo from '../img/logo.png'
-import { Spin } from 'antd';
+import { Spin,Table } from 'antd';
 
 import { Form, Input, Button, Checkbox,Layout,Menu, Breadcrumb,Row, Col } from 'antd';
 
@@ -58,7 +58,7 @@ let pop = this.props
   sessionStorage.setItem('UserName',UserName);
 
   if(sessionStorage.getItem('Auth') != null){
-    pop.history.push('/Dashobard')
+    pop.history.push('/Dashboard')
   }
 }).catch(function (error) {
   self.setState({ loading: false });
@@ -74,6 +74,26 @@ let pop = this.props
   }
  
   render(){
+    const dataSource = [];
+    
+    const columns = [
+      {
+        title: 'Notification',
+        dataIndex: 'name',
+        key: 'name',
+      },
+      {
+        title: 'Alert & Link',
+        dataIndex: 'age',
+        key: 'age',
+      },
+      {
+        title: 'Awards',
+        dataIndex: 'address',
+        key: 'address',
+      },
+    ];
+
     const onFinish = values => {
       console.log('Success:', values);
     };
@@ -100,7 +120,7 @@ let pop = this.props
       <div className="site-layout-content">
       <Row>
       <Col span={12} offset={5}>
-      <Form style={{'margin-top':'5rem'}}
+      <Form style={{"margin-top":"5rem"}}
   {...layout}
   name="basic"
   initialValues={{
@@ -120,7 +140,6 @@ let pop = this.props
       },
     ]}
   >
-   
     <Input name='username' onChange={this.handleChange} />
   </Form.Item>
 
@@ -138,19 +157,18 @@ let pop = this.props
   </Form.Item>
 
   <Form.Item {...tailLayout} name="remember" valuePropName="checked">
-    <Checkbox>Remember me</Checkbox>
-  </Form.Item>
-
-  <Form.Item {...tailLayout}>
+   
     <Button type="primary" htmlType="submit" onClick={this.loginApp}>
       Login
     </Button>
+    &nbsp; &nbsp;<Checkbox>Remember me</Checkbox>
   </Form.Item>
 </Form>
       
       </Col>
     </Row>
      </div>
+     <Table style={{"margin-top":"3rem"}} dataSource={dataSource} columns={columns} />;
     </Content>
     <Footer style={{ textAlign: 'center' }}>Copyright ©2020 Thantrick Business Solution, All Right reserved</Footer>
   </Layout>
