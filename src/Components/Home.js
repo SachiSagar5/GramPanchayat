@@ -61,7 +61,7 @@ export default class Home extends React.Component {
 
     let self = this;
     await axios
-      .get("http://35.154.139.29:8080/AnthurGP/properties/allProperties")
+      .get(process.env.REACT_APP_ALLPROPERTY)
       .then(function (response) {
         self.setState({
           loading: false,
@@ -101,11 +101,10 @@ export default class Home extends React.Component {
     axios.defaults.headers.common = {
       Authorization: sessionStorage.getItem("Auth"),
     };
+    
     // API URL
-    let URL = `http://35.154.139.29:8080/AnthurGP/properties/${this.state.PropertyIdValue}`;
-    console.log(URL);
     axios
-      .get(URL)
+      .get(`${process.env.REACT_APP_PROPERTY}/${this.state.PropertyIdValue}`)
       .then(function (response) {
         if (response.data.length > 1) {
           self.setState({
@@ -131,7 +130,7 @@ export default class Home extends React.Component {
       Authorization: sessionStorage.getItem("Auth"),
     };
     // API URL
-    let PrevBalURL = `http://35.154.139.29:8080/AnthurGP/properties/prevBalance/${this.state.PreviousBalance}`;
+    let PrevBalURL = `${process.env.REACT_APP_PREVBAL}/${this.state.PreviousBalance}`;
     axios
       .get(PrevBalURL)
       .then(function (response) {
@@ -160,7 +159,7 @@ export default class Home extends React.Component {
       Authorization: sessionStorage.getItem("Auth"),
     };
     // API URL
-    let TotalBlURL = `http://35.154.139.29:8080/AnthurGP/properties/totalBalance/${this.state.TotalBalance}`;
+    let TotalBlURL = `${process.env.REACT_APP_TOTALBAL}/${this.state.TotalBalance}`;
     axios
       .get(TotalBlURL)
       .then(function (response) {
@@ -185,13 +184,15 @@ export default class Home extends React.Component {
   };
   // Send SMS script starts
 handleSendMsg=(propertyId)=>{
+  let SendSMS = `${process.env.REACT_APP_SENDSMS}/${propertyId}`
+  console.log(SendSMS)
   axios
-  .get(`http://35.154.139.29:8080/AnthurGP/sendMessage/${propertyId}`)
+  .get(SendSMS)
   .then(function (response) {
     openNotification(response.data)
   })
   .catch(function (error) {
-    console.log(error);
+    openNotification(error)
   });
 }
 
@@ -218,7 +219,7 @@ handleSendMsg=(propertyId)=>{
   };
 
   render() {
-   
+  console.log("banta",process.env.REACT_APP_PROPERTY)
     const columns = [
       {
         title: "Property Id",
@@ -294,8 +295,8 @@ handleSendMsg=(propertyId)=>{
         Currbal.push(temp.tax.currentHouseTax);
         Toalbal.push(temp.tax.currentTotalTax);
       });
-    } else if (this.state.SearchData.length != 0) {
-      if (this.state.SearchData.length != 0) {
+    } else if (this.state.SearchData.length !== 0) {
+      if (this.state.SearchData.length !== 0) {
         let SingleData = {
           propertyId: this.state.SearchData.propertyId,
           Ownername: this.state.SearchData.owner.ownerName,

@@ -63,7 +63,7 @@ export default class Login extends React.Component {
     let self = this;
     self.setState({ loading: true });
     axios
-      .post("http://35.154.139.29:8080/AnthurGP/users/login", data)
+      .post(process.env.REACT_APP_LOGIN, data)
       .then(function (response) {
         let Auth = response.data.Authorization;
         let UserName = response.data.userName;
@@ -88,6 +88,7 @@ export default class Login extends React.Component {
   };
 
   render() {
+    console.log(process.env.REACT_APP_LOGIN)
     const dataSource = [];
 
     const columns = [
