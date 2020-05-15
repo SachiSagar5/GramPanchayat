@@ -1,320 +1,448 @@
-import React from 'react'
-import axios from 'axios'
+import React from "react";
+import axios from "axios";
 
-import { MailOutlined} from '@ant-design/icons';
-import{Link} from 'react-router-dom'
-import logo from '../img/logo.png'
+import { MailOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
+import logo from "../img/logo.png";
+import { EditFilled,InfoCircleOutlined } from "@ant-design/icons";
+import {
+  Layout,
+  Menu,
+  Breadcrumb,
+  Row,
+  Col,
+  Table,
+  Spin,
+  Button,
+  Form,
+  Input,
+  Tooltip,
+  Modal,
+  Divider, 
+  notification 
+} from "antd";
 
-import { Layout,Menu, Breadcrumb,Row, Col,Table,Spin,Button, Form,Input  } from 'antd';
+const openNotification = (PropertyReposne) => {
+  const args = {
+    message:   "SMS Staus",
+    description:
+      `${PropertyReposne}`,
+    duration: 0,
+  };
+  notification.open(args);
+};
 
-export default class Home extends React.Component{
-    constructor(){
-        super()
-        this.state={
-            loading: false,
-            UserData : [],
-            SearchData:[],
-            PropertyIdValue :'',
-            PreviousBalance:'',
-            OwnerInfo:'',
-            TotalBalance:''
-        }
+export default class Home extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      loading: false,
+      UserData: [],
+      SearchData: [],
+      PropertyIdValue: "",
+      PreviousBalance: "",
+      OwnerInfo: "",
+      TotalBalance: "",
+      visible: false,
+    };
+  }
+  async componentDidMount() {
+    this.setState({
+      loading: true,
+    });
+    let session = sessionStorage.getItem("Auth");
+    if (session == null) {
+      this.props.history.push("/");
     }
-async componentDidMount (){
-      this.setState({
-        loading:true
-      })
-        let session = sessionStorage.getItem('Auth');
-        if(session == null){
-            this.props.history.push('/')
-        }
-        // Setting Deafult header
-        axios.defaults.headers.common = {'Authorization': sessionStorage.getItem('Auth')}
+    // Setting Deafult header
+    axios.defaults.headers.common = {
+      Authorization: sessionStorage.getItem("Auth"),
+    };
 
-        let self = this
-     await axios.get('http://35.154.139.29:8080/AnthurGP/properties/allProperties')
-          .then(function (response) {
-          self.setState({
-                  loading: false,
-                  UserData: response.data,
-              })
-          })
-          .catch(function (error) {
-            console.log(error);
-          })
-          
-        }
-// Logout Code
-  handLogOut=()=>{
-      sessionStorage.removeItem('Auth');
-      sessionStorage.removeItem('UserName');
-      this.props.history.push('/')
+    let self = this;
+    await axios
+      .get("http://35.154.139.29:8080/AnthurGP/properties/allProperties")
+      .then(function (response) {
+        self.setState({
+          loading: false,
+          UserData: response.data,
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
+  // Logout Code
+  handLogOut = () => {
+    sessionStorage.removeItem("Auth");
+    sessionStorage.removeItem("UserName");
+    this.props.history.push("/");
+  };
   // Tablle sort code
- onChange=(pagination, filters, sorter, extra)=> {
-    console.log('params', pagination, filters, sorter, extra);
-  }
+  onChange = (pagination, filters, sorter, extra) => {
+    console.log("params", pagination, filters, sorter, extra);
+  };
 
   //Assign Search Value
-OnChnageSearch=(e)=>{
-  this.setState({
-    [e.target.name] :[e.target.value].join()
-  })
-}
-  // Property Search
-  hadnleSearch=(e)=>{
-    e.preventDefault()
-    let self = this
+  OnChnageSearch = (e) => {
     this.setState({
-      loading:true,
-      UserData: []
-    })
+      [e.target.name]: [e.target.value].join(),
+    });
+  };
+  // Property Search
+  hadnleSearch = (e) => {
+    e.preventDefault();
+    let self = this;
+    this.setState({
+      loading: true,
+      UserData: [],
+    });
 
-    axios.defaults.headers.common = {'Authorization': sessionStorage.getItem('Auth')}
+    axios.defaults.headers.common = {
+      Authorization: sessionStorage.getItem("Auth"),
+    };
     // API URL
-    let URL = `http://35.154.139.29:8080/AnthurGP/properties/${this.state.PropertyIdValue}`
-    console.log(URL)
-    axios.get(URL).then(function (response) {
-      if(response.data.length > 1){
-        self.setState({
-          loading: false,
-          UserData: response.data
-      })
-      }else{
-        self.setState({
-          loading: false,
-          SearchData: response.data
-      })
-      }
+    let URL = `http://35.154.139.29:8080/AnthurGP/properties/${this.state.PropertyIdValue}`;
+    console.log(URL);
+    axios
+      .get(URL)
+      .then(function (response) {
+        if (response.data.length > 1) {
+          self.setState({
+            loading: false,
+            UserData: response.data,
+          });
+        } else {
+          self.setState({
+            loading: false,
+            SearchData: response.data,
+          });
+        }
       })
       .catch(function (error) {
         console.log(error);
         self.setState({
           loading: false,
-        })
+        });
+      });
+
+    // Previous Balance
+    axios.defaults.headers.common = {
+      Authorization: sessionStorage.getItem("Auth"),
+    };
+    // API URL
+    let PrevBalURL = `http://35.154.139.29:8080/AnthurGP/properties/prevBalance/${this.state.PreviousBalance}`;
+    axios
+      .get(PrevBalURL)
+      .then(function (response) {
+        console.log("prevdata", response.data);
+        if (response.data.length > 1) {
+          self.setState({
+            loading: false,
+            UserData: response.data,
+          });
+        } else {
+          self.setState({
+            loading: false,
+            SearchData: response.data,
+          });
+        }
       })
+      .catch(function (error) {
+        console.log(error);
+        self.setState({
+          loading: false,
+        });
+      });
 
-      // Previous Balance 
-      axios.defaults.headers.common = {'Authorization': sessionStorage.getItem('Auth')}
-      // API URL
-      let PrevBalURL = `http://35.154.139.29:8080/AnthurGP/properties/prevBalance/${this.state.PreviousBalance}`
-      axios.get(PrevBalURL).then(function (response) {
-        console.log('prevdata',response.data)
-        if(response.data.length > 1){
+    // TotalBalance Balance
+    axios.defaults.headers.common = {
+      Authorization: sessionStorage.getItem("Auth"),
+    };
+    // API URL
+    let TotalBlURL = `http://35.154.139.29:8080/AnthurGP/properties/totalBalance/${this.state.TotalBalance}`;
+    axios
+      .get(TotalBlURL)
+      .then(function (response) {
+        if (response.data.length > 1) {
           self.setState({
             loading: false,
-            UserData: response.data
-        })
-        }else{
+            UserData: response.data,
+          });
+        } else {
           self.setState({
             loading: false,
-            SearchData: response.data
-        })
+            SearchData: response.data,
+          });
         }
-        })
-        .catch(function (error) {
-          console.log(error);
-          self.setState({
-            loading: false,
-          })
-        })
+      })
+      .catch(function (error) {
+        console.log(error);
+        self.setState({
+          loading: false,
+        });
+      });
+  };
+  // Send SMS script starts
+handleSendMsg=(propertyId)=>{
+  axios
+  .get(`http://35.154.139.29:8080/AnthurGP/sendMessage/${propertyId}`)
+  .then(function (response) {
+    openNotification(response.data)
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+}
 
-    // TotalBalance Balance 
-      axios.defaults.headers.common = {'Authorization': sessionStorage.getItem('Auth')}
-      // API URL
-      let TotalBlURL = `http://35.154.139.29:8080/AnthurGP/properties/totalBalance/${this.state.TotalBalance}`
-      axios.get(TotalBlURL).then(function (response) {
-        if(response.data.length > 1){
-          self.setState({
-            loading: false,
-            UserData: response.data
-        })
-        }else{
-          self.setState({
-            loading: false,
-            SearchData: response.data
-        })
-        }
-        })
-        .catch(function (error) {
-          console.log(error);
-          self.setState({
-            loading: false,
-          })
-        })
+  // Modal script start
+  UpdateDetails = (id) => {
+    this.setState({
+      visible: true,
+    });
+  };
+
+  handleOk = (e) => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+    console.log(this.PreviousBalance)
+  };
+
+  handleCancel = (e) => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  };
+
+  render() {
+   
+    const columns = [
+      {
+        title: "Property Id",
+        dataIndex: "propertyId",
+        defaultSortOrder: "descend",
+        sorter: (a, b) => a.propertyId - b.propertyId,
+      },
+      {
+        title: "Owner Name",
+        dataIndex: "Ownername",
+        sorter: (a, b) => a.Ownername.length - b.Ownername.length,
+        sortDirections: ["descend", "ascend"],
+      },
+      {
+        title: "Previous Balance",
+        dataIndex: "PreviousBalance",
+        defaultSortOrder: "descend",
+        sorter: (a, b) => a.PreviousBalance - b.PreviousBalance,
+      },
+      {
+        title: "Current Balance",
+        dataIndex: "CurrentBalance",
+        defaultSortOrder: "descend",
+        sorter: (a, b) => a.CurrentBalance - b.CurrentBalance,
+      },
+      {
+        title: "Total Balance",
+        dataIndex: "TotalBalance",
+        defaultSortOrder: "descend",
+        sorter: (a, b) => a.TotalBalance - b.TotalBalance,
+      },
+      {
+        title: "Deails",
+        dataIndex: "details",
+      },
+      {
+        title: "Send Message",
+        dataIndex: "Message",
+      },
+    ];
+
+    // Pass json data structure to create tab;e
+    const data = [];
+
+    // Forming table json structure single value and Aaray
+    if (this.state.SearchData.length == 0) {
+      this.state.UserData.map((temp) => {
+        let Ownname = [];
+        let PrevBal = [];
+        let Currbal = [];
+        let Toalbal = [];
+        data.push({
+          propertyId: temp.propertyId,
+          Ownername: Ownname,
+          PreviousBalance: PrevBal,
+          CurrentBalance: Currbal,
+          TotalBalance: Toalbal,
+          details: "",
+          Message: <Button type="primary" onClick={()=>this.handleSendMsg(temp.propertyId)}>Send</Button>,
+          details: (
+            <Tooltip title="Edit User Details">
+              <Button
+                type="primary"
+                onClick={() => this.UpdateDetails(temp.propertyId)}
+              >
+                <EditFilled />
+              </Button>{" "}
+            </Tooltip>
+          ),
+        });
+        Ownname.push(temp.owner.ownerName);
+        PrevBal.push(temp.tax.previousHouseTax);
+        Currbal.push(temp.tax.currentHouseTax);
+        Toalbal.push(temp.tax.currentTotalTax);
+      });
+    } else if (this.state.SearchData.length != 0) {
+      if (this.state.SearchData.length != 0) {
+        let SingleData = {
+          propertyId: this.state.SearchData.propertyId,
+          Ownername: this.state.SearchData.owner.ownerName,
+          PreviousBalance: this.state.SearchData.tax.previousHouseTax,
+          CurrentBalance: this.state.SearchData.tax.currentHouseTax,
+          TotalBalance: this.state.SearchData.tax.currentTotalTax,
+          details: "",
+          Message: <Button type="primary">Send</Button>,
+          details: (
+            <Tooltip title="Edit User Details">
+              <Button
+                type="primary"
+                onClick={() => this.UpdateDetails(this.state.SearchData.propertyId)}
+              >
+                <EditFilled />
+              </Button>{" "}
+            </Tooltip>
+          ),
+        };
+        data.length = 0;
+        data.push(SingleData);
+      }
     }
-
-    render(){
-     const columns = [
-          
-            {
-              title: 'Property Id',
-              dataIndex: 'propertyId',
-              defaultSortOrder: 'descend',
-              sorter: (a, b) => a.propertyId - b.propertyId,
-            },
-            {
-                title: 'Owner Name',
-                dataIndex: 'Ownername',
-                sorter: (a, b) => a.Ownername.length - b.Ownername.length,
-                sortDirections: ['descend', 'ascend'],
-              }, 
-              {
-                title: 'Previous Balance',
-                dataIndex: 'PreviousBalance',
-                defaultSortOrder: 'descend',
-                sorter: (a, b) => a.PreviousBalance - b.PreviousBalance,
-              },
-              {
-                title: 'Current Balance',
-                dataIndex: 'CurrentBalance',
-                defaultSortOrder: 'descend',
-                sorter: (a, b) => a.CurrentBalance - b.CurrentBalance,
-              },
-              {
-                title: 'Total Balance',
-                dataIndex: 'TotalBalance',
-                defaultSortOrder: 'descend',
-                sorter: (a, b) => a.TotalBalance - b.TotalBalance,
-              },
-              {
-                title: 'Deails',
-                dataIndex: 'details'
-              },
-              {
-                title: 'Send Message',
-                dataIndex: 'Message',
-              },
-          ];
-
-          // Pass json data structure to create tab;e
-          const data = [];
-
-          // Forming table json structure single value and Aaray
-          if(this.state.SearchData.length == 0){
-            this.state.UserData.map(temp=>{
-              let Ownname = [];
-              let PrevBal = [];
-              let Currbal = [];
-              let Toalbal = []
-                data.push({
-                    propertyId:temp.propertyId,
-                    Ownername : Ownname,
-                    PreviousBalance: PrevBal,
-                    CurrentBalance:Currbal,
-                    TotalBalance: Toalbal,
-                    details: "",
-                    Message: <Button type="primary">Send</Button>
-                })
-                Ownname.push(temp.owner.ownerName);
-                PrevBal.push(temp.tax.previousHouseTax);
-                Currbal.push(temp.tax.currentHouseTax);
-                Toalbal.push(temp.tax.currentTotalTax)
-          })
-          }else if(this.state.SearchData.length != 0){
-            if(this.state.SearchData.length != 0){
-              let SingleData = {
-                propertyId:this.state.SearchData.propertyId,
-                Ownername : this.state.SearchData.owner.ownerName,
-                PreviousBalance: this.state.SearchData.tax.previousHouseTax,
-                CurrentBalance:this.state.SearchData.tax.currentHouseTax,
-                TotalBalance: this.state.SearchData.tax.currentTotalTax,
-                details: "",
-                Message: <Button type="primary">Send</Button>
-               }
-               data.length = 0
-               data.push(SingleData)
-            }
-  
-          }
-        const { Header, Footer, Sider, Content } = Layout;
-        return (
-            <Spin spinning={this.state.loading}>
-            <Layout className="layout">
-        <Header >
-              <Row>
-                <Col>
-                <img src={logo} className="logo" style={{'width':'80px'}} />
-                </Col>
+    const { Header, Footer, Sider, Content } = Layout;
+    return (
+      <Spin spinning={this.state.loading}>
+        <Layout className="layout">
+          <Header>
+            <Row>
+              <Col>
+                <img src={logo} className="logo" style={{ width: "80px" }} />
+              </Col>
               <Col offset={4}>
-                 <span className='kannada-font'>ಕರ್ನಾಟಕ ಸರ್ಕಾರ ಗ್ರಾಮಪಂಚಾಯತ್ ಕರ್ಯಾಲಯ,ಆಂಥೂರ್-582 205</span>
+                <span className="kannada-font">
+                  ಕರ್ನಾಟಕ ಸರ್ಕಾರ ಗ್ರಾಮಪಂಚಾಯತ್ ಕರ್ಯಾಲಯ,ಆಂತೂರ-582 205
+                </span>
               </Col>
               <Col offset={5} span={2}>
-                  <img src={logo} className="logo" style={{'width':'80px'}} />
+                <img src={logo} className="logo" style={{ width: "80px" }} />
               </Col>
-              </Row>
-        </Header>
-        <Menu onClick={this.handleClick} selectedKeys={[this.state.current]} mode="horizontal">
-          <Menu.Item key="mail" icon={<MailOutlined />}>
-          <Link to='Dashboard'>Home &nbsp; |</Link> 
-          </Menu.Item>
-          <Menu.Item key="app">
-          <Link to='Property-Tax'> Property Tax  &nbsp; |</Link>
-          </Menu.Item>
-          <Menu.Item key="Tap Water Tax ">
-              Tap Water Tax  &nbsp; |
-          </Menu.Item>
-          <Menu.Item key="Reports">
-            Reports &nbsp; |
-          </Menu.Item>
-          <Menu.Item key="Logout" onClick={this.handLogOut}>
-            Logout
-          </Menu.Item>
-          <Menu.Item key="Username" style={{"float":"right"}}>
-            Hello {sessionStorage.getItem('UserName')}
-          </Menu.Item>
-      </Menu>
-      <Form
-      name="advanced_search"
-      className="ant-advanced-search-form"
-    >
-      <Row style={{"margin-top":"2rem"}}>
-        <Col span={6} offset={4}>
-          <Form.Item name="PropertyId" label="Property Id">
-             <Input name="PropertyIdValue" onChange={this.OnChnageSearch}/>
-          </Form.Item>
-         </Col>
-        <Col span={6} offset={2}> 
-        <Form.Item name="PreviousBalance" label="Previous Balance">
-             <Input name="PreviousBalance" onChange={this.OnChnageSearch}/>
-          </Form.Item>
-          </Col>
-      </Row>
-      <Row >
-        <Col span={6} offset={4}>
-        <Form.Item name="OwnerInfo" label="Owner">
-            <Col offset={2}> <Input  name="OwnerInfo" onChange={this.OnChnageSearch}/></Col>
-          </Form.Item>
-          </Col>
-        <Col span={6} offset={2}>
-        <Form.Item name="TotalBalance" label="Total Balance">
-            <Col offset={2}><Input name="TotalBalance" onChange={this.OnChnageSearch}/></Col>
-          </Form.Item>
-        </Col>
-        <Col offset={1}><Button type='primary' onClick={this.hadnleSearch}>Search</Button></Col>
-      </Row>
-      <Row>
-       
-      </Row>
-    </Form>
-
-        <Content style={{ padding: '0 50px' }}>
-            <Breadcrumb style={{ margin: '16px 0' }}>
-            </Breadcrumb>
-            <section>
-
-            </section>
-            <div className="site-layout-content">
+            </Row>
+          </Header>
+          <Menu
+            onClick={this.handleClick}
+            selectedKeys={[this.state.current]}
+            mode="horizontal"
+          >
+            <Menu.Item key="mail" icon={<MailOutlined />}>
+              <Link to="Dashboard">Home &nbsp; |</Link>
+            </Menu.Item>
+            <Menu.Item key="app">
+              <Link to="Property-Tax"> Property Tax &nbsp; |</Link>
+            </Menu.Item>
+            <Menu.Item key="Tap Water Tax ">Tap Water Tax &nbsp; |</Menu.Item>
+            <Menu.Item key="Reports">Reports &nbsp; |</Menu.Item>
+            <Menu.Item key="Logout" onClick={this.handLogOut}>
+              Logout
+            </Menu.Item>
+            <Menu.Item key="Username" style={{ float: "right" }}>
+              Hello {sessionStorage.getItem("UserName")}
+            </Menu.Item>
+          </Menu>
+          <Form name="advanced_search" className="ant-advanced-search-form">
+            <Row style={{ "margin-top": "2rem" }}>
+              <Col span={6} offset={4}>
+                <Form.Item name="PropertyId" label="Property Id">
+                  <Input
+                    name="PropertyIdValue"
+                    onChange={this.OnChnageSearch}
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={6} offset={2}>
+                <Form.Item name="PreviousBalance" label="Previous Balance">
+                  <Input
+                    name="PreviousBalance"
+                    onChange={this.OnChnageSearch}
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
             <Row>
-            <Col span={24}>
-            <Table columns={columns} dataSource={data} onChange={this.onChange} size="small"/>
-            </Col>
-        </Row>
+              <Col span={6} offset={4}>
+                <Form.Item name="OwnerInfo" label="Owner">
+                  <Col offset={2}>
+                    {" "}
+                    <Input name="OwnerInfo" onChange={this.OnChnageSearch} />
+                  </Col>
+                </Form.Item>
+              </Col>
+              <Col span={6} offset={2}>
+                <Form.Item name="TotalBalance" label="Total Balance">
+                  <Col offset={2}>
+                    <Input name="TotalBalance" onChange={this.OnChnageSearch} />
+                  </Col>
+                </Form.Item>
+              </Col>
+              <Col offset={1}>
+                <Button type="primary" onClick={this.hadnleSearch}>
+                  Search
+                </Button>
+              </Col>
+            </Row>
+            <Row></Row>
+          </Form>
+
+          <Content style={{ padding: "0 50px" }}>
+            <Breadcrumb style={{ margin: "16px 0" }}></Breadcrumb>
+            <section></section>
+            <div className="site-layout-content">
+              <Row>
+                <Col span={24}>
+                  <Table
+                    columns={columns}
+                    dataSource={data}
+                    onChange={this.onChange}
+                    size="small"
+                  />
+                </Col>
+              </Row>
             </div>
-        </Content>
-        <Footer style={{ textAlign: 'center' }}>Copyright ©2020 Thantrick Business Solution, All Right reserved</Footer>
+            <Modal
+              title="Update User Details"
+              visible={this.state.visible}
+              onOk={this.handleOk}
+              onCancel={this.handleCancel}
+            >
+              <Form>
+              <Form.Item name="PreviousBalance" label="Previous Balance">
+                  <Col offset={2}>
+                    <Input name="PreviousBalance" onChange="" />
+                  </Col>
+                </Form.Item>
+                <Form.Item name="PreviousBalance"  label="Current Balance">
+                  <Col offset={2}>
+                    <Input name="PreviousBalance" ref={(PreviousBalance) => this.PreviousBalance = PreviousBalance} />
+                  </Col>
+                </Form.Item>
+                <Divider/> <h3>Total Balance : {}</h3>
+                </Form>
+            </Modal>
+          </Content>
+          <Footer style={{ textAlign: "center" }}>
+            Copyright ©2020 Thantrick Business Solution, All Right reserved
+          </Footer>
         </Layout>
-        </Spin>
-        );
-        }
+      </Spin>
+    );
+  }
 }
