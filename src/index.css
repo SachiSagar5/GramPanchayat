@@ -35,10 +35,14 @@ section.dashboar-btn .ant-row {
 section.dashboar-btn button{
   height: 81px;
   width: 125px;
-  background-color: #0e0099;
+  background-color: darkblue;
+  border-radius: 10px;
 }
 .ant-layout-footer{
   position: static;
     bottom: 0;
     width: 100%;
+}
+.ant-advanced-search-form,.ant-table-thead > tr > th{
+  background-color: #4c9acc !important;
 }

@@ -55,9 +55,7 @@ export default class Login extends React.Component {
                   ಕರ್ನಾಟಕ ಸರ್ಕಾರ ಗ್ರಾಮಪಂಚಾಯತ್ ಕರ್ಯಾಲಯ,ಆಂತೂರ-582 205
                 </span>
               </Col>
-              <Col offset={5} span={2}>
-                <img src={logo} className="logo" style={{ width: "80px" }} />
-              </Col>
+            
             </Row>
           </Header>
           <Menu

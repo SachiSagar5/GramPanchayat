@@ -97,90 +97,99 @@ export default class Home extends React.Component {
       loading: true,
       UserData: [],
     });
-
-    axios.defaults.headers.common = {
-      Authorization: sessionStorage.getItem("Auth"),
-    };
+if(this.state.PropertyIdValue){
+  axios.defaults.headers.common = {
+    Authorization: sessionStorage.getItem("Auth"),
+  };
+  
+  // API URL
+  axios
+    .get(`${process.env.REACT_APP_PROPERTY}/${this.state.PropertyIdValue}`)
+    .then(function (response) {
+      if (response.data.length > 1) {
+        self.setState({
+          loading: false,
+          UserData: response.data,
+        });
+      } else {
+        self.setState({
+          loading: false,
+          SearchData: response.data,
+        });
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+      self.setState({
+        loading: false,
+      });
+    });
+}
+   
+if(this.state.PreviousBalance){
+// Previous Balance
+axios.defaults.headers.common = {
+  Authorization: sessionStorage.getItem("Auth"),
+};
+// API URL
+let PrevBalURL = `${process.env.REACT_APP_PREVBAL}/${this.state.PreviousBalance}`;
+axios
+  .get(PrevBalURL)
+  .then(function (response) {
+    console.log("prevdata", response.data);
+    if (response.data.length > 1) {
+      self.setState({
+        loading: false,
+        UserData: response.data,
+      });
+    } else {
+      self.setState({
+        loading: false,
+        SearchData: response.data,
+      });
+    }
+  })
+  .catch(function (error) {
+    console.log(error);
+    self.setState({
+      loading: false,
+    });
+  });
+}
     
-    // API URL
-    axios
-      .get(`${process.env.REACT_APP_PROPERTY}/${this.state.PropertyIdValue}`)
-      .then(function (response) {
-        if (response.data.length > 1) {
-          self.setState({
-            loading: false,
-            UserData: response.data,
-          });
-        } else {
-          self.setState({
-            loading: false,
-            SearchData: response.data,
-          });
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-        self.setState({
-          loading: false,
-        });
-      });
 
-    // Previous Balance
-    axios.defaults.headers.common = {
-      Authorization: sessionStorage.getItem("Auth"),
-    };
-    // API URL
-    let PrevBalURL = `${process.env.REACT_APP_PREVBAL}/${this.state.PreviousBalance}`;
-    axios
-      .get(PrevBalURL)
-      .then(function (response) {
-        console.log("prevdata", response.data);
-        if (response.data.length > 1) {
-          self.setState({
-            loading: false,
-            UserData: response.data,
-          });
-        } else {
-          self.setState({
-            loading: false,
-            SearchData: response.data,
-          });
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-        self.setState({
-          loading: false,
-        });
+if(this.state.TotalBalance){
+// TotalBalance Balance
+axios.defaults.headers.common = {
+  Authorization: sessionStorage.getItem("Auth"),
+};
+// API URL
+let TotalBlURL = `${process.env.REACT_APP_TOTALBAL}/${this.state.TotalBalance}`;
+axios
+  .get(TotalBlURL)
+  .then(function (response) {
+    console.log('total',response.data)
+    if (response.data.length > 1) {
+      self.setState({
+        loading: false,
+        UserData: response.data,
       });
-
-    // TotalBalance Balance
-    axios.defaults.headers.common = {
-      Authorization: sessionStorage.getItem("Auth"),
-    };
-    // API URL
-    let TotalBlURL = `${process.env.REACT_APP_TOTALBAL}/${this.state.TotalBalance}`;
-    axios
-      .get(TotalBlURL)
-      .then(function (response) {
-        if (response.data.length > 1) {
-          self.setState({
-            loading: false,
-            UserData: response.data,
-          });
-        } else {
-          self.setState({
-            loading: false,
-            SearchData: response.data,
-          });
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-        self.setState({
-          loading: false,
-        });
+    } else {
+      self.setState({
+        loading: false,
+        SearchData: response.data,
       });
+    }
+  })
+  .catch(function (error) {
+    console.log(error);
+    self.setState({
+      loading: false,
+    });
+  });
+  
+}
+    
   };
   // Send SMS script starts
 handleSendMsg=(propertyId)=>{
@@ -219,7 +228,6 @@ handleSendMsg=(propertyId)=>{
   };
 
   render() {
-  console.log("banta",process.env.REACT_APP_PROPERTY)
     const columns = [
       {
         title: "Property Id",
@@ -291,18 +299,18 @@ handleSendMsg=(propertyId)=>{
           ),
         });
         Ownname.push(temp.owner.ownerName);
-        PrevBal.push(temp.tax.previousHouseTax);
-        Currbal.push(temp.tax.currentHouseTax);
-        Toalbal.push(temp.tax.currentTotalTax);
+        PrevBal.push(temp.tax.previousTotalTax);
+        Currbal.push(temp.tax.currentTotalTax);
+        Toalbal.push(temp.tax.outstandingTotalTax);
       });
     } else if (this.state.SearchData.length !== 0) {
       if (this.state.SearchData.length !== 0) {
         let SingleData = {
           propertyId: this.state.SearchData.propertyId,
-          Ownername: this.state.SearchData.owner.ownerName,
-          PreviousBalance: this.state.SearchData.tax.previousHouseTax,
-          CurrentBalance: this.state.SearchData.tax.currentHouseTax,
-          TotalBalance: this.state.SearchData.tax.currentTotalTax,
+          // Ownername: this.state.SearchData.owner.ownerName,
+          PreviousBalance: this.state.SearchData.tax.previousTotalTax,
+          CurrentBalance: this.state.SearchData.tax.currentTotalTax,
+          TotalBalance: this.state.SearchData.tax.outstandingTotalTax,
           details: "",
           Message: <Button type="primary">Send</Button>,
           details: (
@@ -359,7 +367,9 @@ handleSendMsg=(propertyId)=>{
               Hello {sessionStorage.getItem("UserName")}
             </Menu.Item>
           </Menu>
+          <label style={{"margin-left":"2rem"}}><h2>Search By:</h2></label>
           <Form name="advanced_search" className="ant-advanced-search-form">
+          
             <Row style={{ "margin-top": "2rem" }}>
               <Col span={6} offset={4}>
                 <Form.Item name="PropertyId" label="Property Id">
@@ -395,7 +405,7 @@ handleSendMsg=(propertyId)=>{
                 </Form.Item>
               </Col>
               <Col offset={1}>
-                <Button type="primary" onClick={this.hadnleSearch}>
+                <Button type="" onClick={this.hadnleSearch}>
                   Search
                 </Button>
               </Col>
