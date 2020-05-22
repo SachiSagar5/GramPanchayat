@@ -1,7 +1,9 @@
 import React from "react";
 import axios from "axios";
 import logo from "../img/logo.png";
-import { Spin, Table, notification } from "antd";
+import water from "../img/water.png";
+import tree from "../img/tree.png";
+import { Spin, Table, notification,Radio } from "antd";
 
 import {
   Form,
@@ -126,7 +128,7 @@ export default class Login extends React.Component {
               <Col>
                 <img src={logo} className="logo" style={{ width: "80px" }} />
               </Col>
-              <Col offset={4}>
+              <Col offset={5}>
                 <span className="kannada-font">
                   ಕರ್ನಾಟಕ ಸರ್ಕಾರ ಗ್ರಾಮಪಂಚಾಯತ್ ಕರ್ಯಾಲಯ,ಆಂತೂರ-582 205
                 </span>
@@ -135,22 +137,26 @@ export default class Login extends React.Component {
             </Row>
           </Header>
           <Content style={{ padding: "0 50px" }}>
-            <Breadcrumb style={{ margin: "16px 0" }}>
-              <p></p>
-            </Breadcrumb>
             <div className="site-layout-content">
               <Row>
-                <Col span={12} offset={5}>
+                <Col span={6}>
+                  <img src={water} style={{marginTop:'5rem'}}/>
+                </Col>
+               
+                <Col span={12} >
+                <div className="Login-Bg"  style={{ "margin-top": "5rem" }}>
                   <Form
-                    style={{ "margin-top": "5rem" }}
                     {...layout}
                     name="basic"
                     initialValues={{
                       remember: true,
                     }}
+                    
                     onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
                   >
+                      <Form.Item label="Language"><Radio id="kannada"> <label  for="kannda">Kannada</label></Radio>
+                       <Radio id="English" checked><label for="English">English</label></Radio></Form.Item>
                     <Form.Item
                       label="Username"
                       name="username"
@@ -195,10 +201,16 @@ export default class Login extends React.Component {
                       &nbsp; &nbsp;<Checkbox>Remember me</Checkbox>
                     </Form.Item>
                   </Form>
+                  </div>
+                </Col>
+               
+                <Col span={6} style={{ "margin-top": "5rem","text-align":"center" }}>
+                  <img src={tree}  />
                 </Col>
               </Row>
             </div>
             <Table
+            className="custom-table"
               style={{ "margin-top": "3rem" }}
               dataSource={dataSource}
               columns={columns}

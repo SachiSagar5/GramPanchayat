@@ -46,3 +46,22 @@ section.dashboar-btn button{
 .ant-advanced-search-form,.ant-table-thead > tr > th{
   background-color: #4c9acc !important;
 }
+.Login-Bg{
+  background-color: #4c9acc;
+  padding: 40px 0;
+  border-radius: 15px;
+}
+.Login-Bg .ant-form-item-label > label{
+  color: #ffffff;
+}
+.custom-table thead tr th:nth-child(1) {
+  background-color: orange !important;
+}
+.custom-table thead tr th:nth-child(3) {
+  background-color: #222 !important;
+  color: #fff !important;
+}
+.custom-table .ant-table-tbody > tr > td{
+  border: 1px solid #ccc;
+
+}
