@@ -307,12 +307,12 @@ handleSendMsg=(propertyId)=>{
       if (this.state.SearchData.length !== 0) {
         let SingleData = {
           propertyId: this.state.SearchData.propertyId,
-          // Ownername: this.state.SearchData.owner.ownerName,
+          Ownername: this.state.SearchData.owner.ownerName,
           PreviousBalance: this.state.SearchData.tax.previousTotalTax,
           CurrentBalance: this.state.SearchData.tax.currentTotalTax,
           TotalBalance: this.state.SearchData.tax.outstandingTotalTax,
           details: "",
-          Message: <Button type="primary">Send</Button>,
+          Message: <Button type="primary"onClick={()=>this.handleSendMsg(this.state.SearchData.propertyId)} >Send</Button>,
           details: (
             <Tooltip title="Edit User Details">
               <Button
@@ -332,22 +332,23 @@ handleSendMsg=(propertyId)=>{
     return (
       <Spin spinning={this.state.loading}>
         <Layout className="layout">
-          <Header>
+        <Header>
             <Row>
-              <Col>
-                <img src={logo} className="logo" style={{ width: "80px" }} />
+              <Col span={7}>
+                <img src={logo} className="logo" style={{ width: "80px","text-align":"left" }} />
               </Col>
-              <Col offset={4}>
-                <span className="kannada-font">
-                  ಕರ್ನಾಟಕ ಸರ್ಕಾರ ಗ್ರಾಮಪಂಚಾಯತ್ ಕರ್ಯಾಲಯ,ಆಂತೂರ-582 205
+              <Col span={9} className="kannada-font">
+                <span>
+                  <span>ಕರ್ನಾಟಕ ಸರ್ಕಾರ </span>
+                  ಗ್ರಾಮಪಂಚಾಯತ್ ಕರ್ಯಾಲಯ,ಆಂತೂರ-582 205
                 </span>
               </Col>
-              <Col offset={5} span={2}>
-                <img src={logo} className="logo" style={{ width: "80px" }} />
+              <Col span={8} style={{ "text-align":"right" }}>
+                <img src={logo} className="logo" style={{ width: "80px"}} />
               </Col>
             </Row>
           </Header>
-          <Menu
+         <Menu
             onClick={this.handleClick}
             selectedKeys={[this.state.current]}
             mode="horizontal"

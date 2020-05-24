@@ -125,26 +125,29 @@ export default class Login extends React.Component {
         <Layout className="layout">
           <Header>
             <Row>
-              <Col>
-                <img src={logo} className="logo" style={{ width: "80px" }} />
+              <Col span={7}>
+                <img src={logo} className="logo" style={{ width: "80px","text-align":"left" }} />
               </Col>
-              <Col offset={5}>
-                <span className="kannada-font">
-                  ಕರ್ನಾಟಕ ಸರ್ಕಾರ ಗ್ರಾಮಪಂಚಾಯತ್ ಕರ್ಯಾಲಯ,ಆಂತೂರ-582 205
+              <Col span={9} className="kannada-font">
+                <span>
+                  <span>ಕರ್ನಾಟಕ ಸರ್ಕಾರ </span>
+                  ಗ್ರಾಮಪಂಚಾಯತ್ ಕರ್ಯಾಲಯ,ಆಂತೂರ-582 205
                 </span>
               </Col>
-             
+              <Col span={8} style={{ "text-align":"right" }}>
+                <img src={logo} className="logo" style={{ width: "80px"}} />
+              </Col>
             </Row>
           </Header>
-          <Content style={{ padding: "0 50px" }}>
+          <Content style={{ padding: "0 10px" }}>
             <div className="site-layout-content">
               <Row>
-                <Col span={6}>
-                  <img src={water} style={{marginTop:'5rem'}}/>
+                <Col span={8} style={{marginTop:'9rem',"text-align":"center" }}>
+                  <img src={water} />
                 </Col>
                
-                <Col span={12} >
-                <div className="Login-Bg"  style={{ "margin-top": "5rem" }}>
+                <Col span={8}>
+                <div className="Login-Bg "  style={{ "margin-top": "5rem" }}>
                   <Form
                     {...layout}
                     name="basic"
@@ -191,7 +194,7 @@ export default class Login extends React.Component {
                       name="remember"
                       valuePropName="checked"
                     >
-                      <Button
+                      <Button className='btn-dark-blue'
                         type="primary"
                         htmlType="submit"
                         onClick={this.loginApp}
@@ -204,7 +207,7 @@ export default class Login extends React.Component {
                   </div>
                 </Col>
                
-                <Col span={6} style={{ "margin-top": "5rem","text-align":"center" }}>
+                <Col span={8} style={{ "margin-top": "9rem","text-align":"center" }}>
                   <img src={tree}  />
                 </Col>
               </Row>

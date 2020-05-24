@@ -45,17 +45,20 @@ export default class Login extends React.Component {
     return (
       <Spin spinning={this.state.loading}>
         <Layout className="layout">
-          <Header>
+        <Header>
             <Row>
-              <Col>
-                <img src={logo} className="logo" style={{ width: "80px" }} />
+              <Col span={7}>
+                <img src={logo} className="logo" style={{ width: "80px","text-align":"left" }} />
               </Col>
-              <Col offset={4}>
-                <span className="kannada-font">
-                  ಕರ್ನಾಟಕ ಸರ್ಕಾರ ಗ್ರಾಮಪಂಚಾಯತ್ ಕರ್ಯಾಲಯ,ಆಂತೂರ-582 205
+              <Col span={9} className="kannada-font">
+                <span>
+                  <span>ಕರ್ನಾಟಕ ಸರ್ಕಾರ </span>
+                  ಗ್ರಾಮಪಂಚಾಯತ್ ಕರ್ಯಾಲಯ,ಆಂತೂರ-582 205
                 </span>
               </Col>
-            
+              <Col span={8} style={{ "text-align":"right" }}>
+                <img src={logo} className="logo" style={{ width: "80px"}} />
+              </Col>
             </Row>
           </Header>
           <Menu

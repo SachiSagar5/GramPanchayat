@@ -14,8 +14,17 @@ code {
 
 .kannada-font{
   font-family: "Noto Sans Kannada", sans-serif; 
-  font-size: 19.0px; 
+  width: 100%;
+  display: block;
+  line-height: 20px;
+  font-size: 20px;
+  margin-top: 15px;
   font-weight: bold;
+  text-align: center;
+}
+.kannada-font span:nth-child(1){
+  display: block;
+  
 }
 .ant-layout{
   background-color: #ffffff;
@@ -56,12 +65,19 @@ section.dashboar-btn button{
 }
 .custom-table thead tr th:nth-child(1) {
   background-color: orange !important;
+  border-radius: 10px 10px 0px 0px;
 }
 .custom-table thead tr th:nth-child(3) {
   background-color: #222 !important;
   color: #fff !important;
+ 
 }
 .custom-table .ant-table-tbody > tr > td{
   border: 1px solid #ccc;
-
+}
+.custom-table .ant-table-container table > thead > tr:first-child th:first-child,.custom-table .ant-table-thead > tr > th,.custom-table .ant-table-container table > thead > tr:first-child th:last-child  {
+  border-radius: 10px 10px 0px 0px;
+}
+.btn-dark-blue{
+  background-color: darkblue;
 }
