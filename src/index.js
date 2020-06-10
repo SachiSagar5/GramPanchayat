@@ -8,6 +8,7 @@ import './index.css';
 import Login from './Components/Login.js'
 import PropertyTax from './Components/Home.js'
 import Dashboard from './Components/Dashboard'
+import TapWaterTax from './Components/TapWaterTax'
 
 ReactDOM.render(
   <div>
@@ -16,6 +17,7 @@ ReactDOM.render(
           <Route exact path='/' component={Login}/>
           <Route  path='/Dashboard' component={Dashboard}/>
           <Route  path='/Property-Tax' component={PropertyTax}/>
+          <Route  path='/TapWater-Tax' component={TapWaterTax}/>
       </Switch>
   </Router>
 

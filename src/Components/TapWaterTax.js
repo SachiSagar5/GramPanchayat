@@ -46,14 +46,14 @@ const openNotificationWithIcon = (error, type) => {
   });
 };
 // Notification code end
-export default class Home extends React.Component {
+export default class TapWaterTax extends React.Component {
   constructor() {
     super();
     this.state = {
       loading: false,
       UserData: [],
       SearchData: [],
-      PropertyIdValue: "",
+      TapId: "",
       PreviousBalance: "",
       OwnerInfo: "",
       TotalBalance: "",
@@ -79,7 +79,7 @@ export default class Home extends React.Component {
 
     let self = this;
     await axios
-      .get(process.env.REACT_APP_ALLPROPERTY)
+      .get(process.env.REACT_APP_ALLTAPWATERTAX)
       .then(function (response) {
         self.setState({
           loading: false,
@@ -88,6 +88,9 @@ export default class Home extends React.Component {
       })
       .catch(function (error) {
         console.log(error);
+        this.setState({
+            loading: false,
+          });
       });
   }
   // Logout Code
@@ -115,14 +118,15 @@ export default class Home extends React.Component {
       loading: true,
       UserData: [],
     });
-if(this.state.PropertyIdValue){
+//Tap ID    
+
+if(this.state.TapId){
   axios.defaults.headers.common = {
     Authorization: sessionStorage.getItem("Auth"),
   };
   
   // API URL
-  axios
-    .get(`${process.env.REACT_APP_PROPERTY}/${this.state.PropertyIdValue}`)
+  axios.get(`${process.env.REACT_APP_TAPWATERID}/${this.state.TapId}`)
     .then(function (response) {
       if (response.data.length >= 1) {
         self.setState({
@@ -134,6 +138,7 @@ if(this.state.PropertyIdValue){
           loading: false,
           SearchData: response.data,
         });
+        console.log(response.data)
       }
      
     })
@@ -144,23 +149,25 @@ if(this.state.PropertyIdValue){
       });
     });
 }
-   
+
+// Previos Balance
 if(this.state.PreviousBalance){
 // Previous Balance
 axios.defaults.headers.common = {
   Authorization: sessionStorage.getItem("Auth"),
 };
 // API URL
-let PrevBalURL = `${process.env.REACT_APP_PREVBAL}/${this.state.PreviousBalance}`;
+let PrevBalURL = `${process.env.REACT_APP_TAPWATERPREVBAL}/${this.state.PreviousBalance}`;
 axios
   .get(PrevBalURL)
   .then(function (response) {
-    console.log("prevdata", response.data);
     if (response.data.length >= 1) {
       self.setState({
         loading: false,
         UserData: response.data,
+      
       });
+      console.log(response.data.length)
     } else {
       self.setState({
         loading: false,
@@ -176,14 +183,13 @@ axios
   });
 }
     
-
+// Total Tap Tax Balance 
 if(this.state.TotalBalance){
-// TotalBalance Balance
 axios.defaults.headers.common = {
   Authorization: sessionStorage.getItem("Auth"),
 };
 // API URL
-let TotalBlURL = `${process.env.REACT_APP_TOTALBAL}/${this.state.TotalBalance}`;
+let TotalBlURL = `${process.env.REACT_APP_TAPWATERTOTALBAL}/${this.state.TotalBalance}`;
 axios
   .get(TotalBlURL)
   .then(function (response) {
@@ -287,7 +293,7 @@ handleSendMsg=(propertyId)=>{
   render() {
     const columns = [
       {
-        title: "Property Id",
+        title: "Tap Id",
         dataIndex: "propertyId",
         defaultSortOrder: "descend",
         sorter: (a, b) => a.propertyId - b.propertyId,
@@ -333,17 +339,17 @@ handleSendMsg=(propertyId)=>{
     if (this.state.SearchData.length == 0) {
       this.state.UserData.map((temp) => {
         let Ownname = [];
-        let PrevBal = [];
-        let Currbal = [];
-        let Toalbal = [];
+        // let PrevBal = [];
+        // let Currbal = [];
+        // let Toalbal = [];
         data.push({
-          propertyId: temp.propertyId,
+          propertyId: temp.tapWaterTaxId,
           Ownername: Ownname,
-          PreviousBalance: PrevBal,
-          CurrentBalance: Currbal,
-          TotalBalance: Toalbal,
+          PreviousBalance: temp.previousBalance,
+          CurrentBalance: temp.currentBalance,
+          TotalBalance: temp.totalBalance,
           details: "",
-          Message: <Button type="primary" onClick={()=>this.handleSendMsg(temp.propertyId)}>Send</Button>,
+          Message: <Button type="primary" onClick={()=>this.handleSendMsg(temp.tapWaterTaxId)}>Send</Button>,
           details: (
             <Tooltip title="Edit User Details">
               <Button
@@ -356,11 +362,8 @@ handleSendMsg=(propertyId)=>{
           ),
         });
         Ownname.push(temp.owner.ownerName);
-        PrevBal.push(temp.tax.previousTotalTax);
-        Currbal.push(temp.tax.currentTotalTax);
-        Toalbal.push(temp.tax.outstandingTotalTax);
       });
-    } 
+    }
     const { Header, Footer, Content } = Layout;
     
     return (
@@ -369,7 +372,7 @@ handleSendMsg=(propertyId)=>{
         <Header>
             <Row>
               <Col span={7}>
-                <img src={logo} className="logo" style={{ width: "80px","text-align":"left" }} />
+                <img src={logo} className="logo" style={{ width: "80px","textAlign":"left" }} />
               </Col>
               <Col span={9} className="kannada-font">
                 <span>
@@ -377,7 +380,7 @@ handleSendMsg=(propertyId)=>{
                   ಗ್ರಾಮಪಂಚಾಯತ್ ಕರ್ಯಾಲಯ,ಆಂತೂರ-582 205
                 </span>
               </Col>
-              <Col span={8} style={{ "text-align":"right" }}>
+              <Col span={8} style={{ "textAlign":"right" }}>
                 <img src={logo} className="logo" style={{ width: "80px"}} />
               </Col>
             </Row>
@@ -393,9 +396,7 @@ handleSendMsg=(propertyId)=>{
             <Menu.Item key="app">
               <Link to="Property-Tax"> Property Tax &nbsp; |</Link>
             </Menu.Item>
-            <Menu.Item key="Tap Water Tax "><Link to="TapWater-Tax">Tap Water Tax &nbsp; |
-            </Link></Menu.Item>
-            
+            <Menu.Item key="Tap Water Tax ">Tap Water Tax &nbsp; |</Menu.Item>
             <Menu.Item key="Reports">Reports &nbsp; |</Menu.Item>
             <Menu.Item key="Logout" onClick={this.handLogOut}>
               Logout
@@ -404,14 +405,14 @@ handleSendMsg=(propertyId)=>{
               Hello {sessionStorage.getItem("UserName")}
             </Menu.Item>
           </Menu>
-          <label style={{"margin-left":"2rem"}}><h2>Search By:</h2></label>
+          <label style={{"marginLeft":"2rem"}}><h2>Search By:</h2></label>
           <Form name="advanced_search" className="ant-advanced-search-form">
           
-            <Row style={{ "margin-top": "2rem" }}>
+            <Row style={{ "marginTop": "2rem" }}>
               <Col span={6} offset={4}>
-                <Form.Item name="PropertyId" label="Property Id">
+                <Form.Item name="TapId" label="Tap Id">
                   <Input
-                    name="PropertyIdValue"
+                    name="TapId"
                     onChange={this.OnChnageSearch}
                   />
                 </Form.Item>

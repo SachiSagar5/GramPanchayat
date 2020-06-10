@@ -41,7 +41,7 @@ export default class Login extends React.Component {
     this.props.history.push("/");
   };
   render() {
-    const { Header, Footer, Sider, Content } = Layout;
+    const { Header, Footer, Content } = Layout;
     return (
       <Spin spinning={this.state.loading}>
         <Layout className="layout">
@@ -72,7 +72,9 @@ export default class Login extends React.Component {
             <Menu.Item key="app">
               <Link to="Property-Tax"> Property Tax &nbsp; |</Link>
             </Menu.Item>
-            <Menu.Item key="Tap Water Tax ">Tap Water Tax &nbsp; |</Menu.Item>
+            <Menu.Item key="Tap Water Tax ">
+            <Link to="TapWater-Tax">Tap Water Tax &nbsp; |
+            </Link></Menu.Item>
             <Menu.Item key="Reports">Reports &nbsp; |</Menu.Item>
             <Menu.Item key="Logout" onClick={this.handLogOut}>
               Logout
@@ -95,7 +97,9 @@ export default class Login extends React.Component {
                   <Button type="primary">Reports</Button>
                 </Col>
                 <Col span={7}>
-                  <Button type="primary">Tax Water Tax</Button>
+                <Link to="TapWater-Tax">
+                  <Button type="primary">Tap Water Tax</Button>
+                  </Link>
                 </Col>
               </Row>
             </section>

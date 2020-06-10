@@ -11,8 +11,6 @@ import {
   Button,
   Checkbox,
   Layout,
-  Menu,
-  Breadcrumb,
   Row,
   Col,
 } from "antd";
@@ -60,7 +58,7 @@ export default class Login extends React.Component {
 
   loginApp = () => {
     let pop = this.props;
-    const data = { password: this.state.password, email: this.state.username };
+    const data = { phoneNo: this.state.username,password: this.state.password };
 
     let self = this;
     self.setState({ loading: true });
@@ -69,11 +67,11 @@ export default class Login extends React.Component {
       .then(function (response) {
         let Auth = response.data.Authorization;
         let UserName = response.data.userName;
-
+        console.log(response.data)
         sessionStorage.setItem("Auth", Auth);
         sessionStorage.setItem("UserName", UserName);
 
-        if (sessionStorage.getItem("Auth") != null) {
+        if (sessionStorage.getItem("Auth").length >10 && response.data.userId !=="") {
           pop.history.push("/Dashboard");
         }
       })
@@ -90,7 +88,6 @@ export default class Login extends React.Component {
   };
 
   render() {
-    console.log(process.env.REACT_APP_LOGIN)
     const dataSource = [];
 
     const columns = [
@@ -112,21 +109,21 @@ export default class Login extends React.Component {
     ];
 
     const onFinish = (values) => {
-      console.log("Success:", values);
+   
     };
 
     const onFinishFailed = (errorInfo) => {
       console.log("Failed:", errorInfo);
     };
 
-    const { Header, Footer, Sider, Content } = Layout;
+    const { Header, Footer, Content } = Layout;
     return (
       <Spin spinning={this.state.loading}>
         <Layout className="layout">
           <Header>
             <Row>
               <Col span={7}>
-                <img src={logo} className="logo" style={{ width: "80px","text-align":"left" }} />
+                <img src={logo} className="logo" alt="" style={{ width: "80px","textAlign":"left" }} />
               </Col>
               <Col span={9} className="kannada-font">
                 <span>
@@ -134,20 +131,20 @@ export default class Login extends React.Component {
                   ಗ್ರಾಮಪಂಚಾಯತ್ ಕರ್ಯಾಲಯ,ಆಂತೂರ-582 205
                 </span>
               </Col>
-              <Col span={8} style={{ "text-align":"right" }}>
-                <img src={logo} className="logo" style={{ width: "80px"}} />
+              <Col span={8} style={{ "textAlign":"right" }}>
+                <img src={logo} className="logo" alt="" style={{ width: "80px"}} />
               </Col>
             </Row>
           </Header>
           <Content style={{ padding: "0 10px" }}>
             <div className="site-layout-content">
               <Row>
-                <Col span={8} style={{marginTop:'9rem',"text-align":"center" }}>
-                  <img src={water} />
+                <Col span={8} style={{marginTop:'9rem',"textAlign":"center" }}>
+                  <img src={water}  alt=""/>
                 </Col>
                
                 <Col span={8}>
-                <div className="Login-Bg "  style={{ "margin-top": "5rem" }}>
+                <div className="Login-Bg "  style={{ "marginTop": "5rem" }}>
                   <Form
                     {...layout}
                     name="basic"
@@ -158,8 +155,8 @@ export default class Login extends React.Component {
                     onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
                   >
-                      <Form.Item label="Language"><Radio id="kannada"> <label  for="kannda">Kannada</label></Radio>
-                       <Radio id="English" checked><label for="English">English</label></Radio></Form.Item>
+                      <Form.Item label="Language"><Radio id="kannada"> <label  htmlFor="kannda">Kannada</label></Radio>
+                       <Radio id="English" checked><label htmlFor="English">English</label></Radio></Form.Item>
                     <Form.Item
                       label="Username"
                       name="username"
@@ -207,14 +204,14 @@ export default class Login extends React.Component {
                   </div>
                 </Col>
                
-                <Col span={8} style={{ "margin-top": "9rem","text-align":"center" }}>
-                  <img src={tree}  />
+                <Col span={8} style={{ "marginTop": "9rem","textAlign":"center" }}>
+                  <img src={tree} alt="" />
                 </Col>
               </Row>
             </div>
             <Table
             className="custom-table"
-              style={{ "margin-top": "3rem" }}
+              style={{ "marginTop": "3rem" }}
               dataSource={dataSource}
               columns={columns}
             />
