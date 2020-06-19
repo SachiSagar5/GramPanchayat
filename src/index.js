@@ -5,8 +5,8 @@ import 'antd/dist/antd.css';
 import {BrowserRouter as Router, Route,Switch} from 'react-router-dom'
 
 import './index.css';
-import Login from './Components/Login.js'
-import PropertyTax from './Components/Home.js'
+import Login from './Components/Login'
+import PropertyTax from './Components/Home'
 import Dashboard from './Components/Dashboard'
 import TapWaterTax from './Components/TapWaterTax'
 

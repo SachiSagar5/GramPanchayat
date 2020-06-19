@@ -1,9 +1,11 @@
 import React from "react";
 import axios from "axios";
-import logo from "../img/logo.png";
 import water from "../img/water.png";
 import tree from "../img/tree.png";
 import { Spin, Table, notification,Radio } from "antd";
+
+import Header from './Header'
+import Footer from './Footer'
 
 import {
   Form,
@@ -116,26 +118,11 @@ export default class Login extends React.Component {
       console.log("Failed:", errorInfo);
     };
 
-    const { Header, Footer, Content } = Layout;
+    const { Content } = Layout;
     return (
       <Spin spinning={this.state.loading}>
         <Layout className="layout">
-          <Header>
-            <Row>
-              <Col span={7}>
-                <img src={logo} className="logo" alt="" style={{ width: "80px","textAlign":"left" }} />
-              </Col>
-              <Col span={9} className="kannada-font">
-                <span>
-                  <span>ಕರ್ನಾಟಕ ಸರ್ಕಾರ </span>
-                  ಗ್ರಾಮಪಂಚಾಯತ್ ಕರ್ಯಾಲಯ,ಆಂತೂರ-582 205
-                </span>
-              </Col>
-              <Col span={8} style={{ "textAlign":"right" }}>
-                <img src={logo} className="logo" alt="" style={{ width: "80px"}} />
-              </Col>
-            </Row>
-          </Header>
+         <Header/>
           <Content style={{ padding: "0 10px" }}>
             <div className="site-layout-content">
               <Row>
@@ -217,9 +204,7 @@ export default class Login extends React.Component {
             />
             ;
           </Content>
-          <Footer style={{ textAlign: "center" }}>
-            Copyright ©2020 Thantrick Business Solution, All Right reserved
-          </Footer>
+        <Footer/>
         </Layout>
       </Spin>
     );
